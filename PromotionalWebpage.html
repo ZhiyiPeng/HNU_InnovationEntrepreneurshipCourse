@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智慧启蒙 - 儿童教育专用智能图片展示终端</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        /* 导航栏 */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+            padding: 1rem 0;
+        }
+
+        nav .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #333;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #667eea;
+        }
+
+        /* 主视觉区 */
+        .hero {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            padding: 6rem 2rem 4rem;
+        }
+
+        .hero-content h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .hero-content p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            animation: fadeInUp 0.8s ease-out 0.2s backwards;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: white;
+            color: #667eea;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.3s, box-shadow 0.3s;
+            animation: fadeInUp 0.8s ease-out 0.4s backwards;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        /* 特性区 */
+        .features {
+            padding: 5rem 2rem;
+            background: #f8f9fa;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #333;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+
+        /* 产品试用区 */
+        .demo {
+            padding: 5rem 2rem;
+            background: white;
+        }
+
+        .demo-container {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .device-frame {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 2rem;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(102, 126, 234, 0.3);
+            display: inline-block;
+            margin: 2rem 0;
+        }
+
+        .screen {
+            width: 320px;
+            height: 240px;
+            background: #000;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        .screen img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background: #000;
+        }
+
+        .demo-controls {
+            margin-top: 2rem;
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .demo-button {
+            padding: 0.8rem 1.5rem;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+            /* 新增样式以支持 a 标签显示为按钮 */
+            display: inline-block;
+            text-decoration: none;
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        .demo-button:hover {
+            background: #5568d3;
+            transform: scale(1.05);
+            color: white;
+        }
+
+        .demo-info {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 15px;
+            text-align: left;
+        }
+
+        /* 价格区 */
+        .pricing {
+            padding: 5rem 2rem;
+            background: #f8f9fa;
+        }
+
+        .pricing-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .pricing-card.featured {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .price {
+            font-size: 3rem;
+            font-weight: bold;
+            margin: 1rem 0;
+        }
+
+        .price-unit {
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+        
+        /* 针对特色卡片内按钮的特殊样式 */
+        .pricing-card.featured .demo-button {
+            background: white; 
+            color: #667eea;
+        }
+        
+        .pricing-card.featured .demo-button:hover {
+            background: #f0f0f0;
+        }
+
+        /* 联系区 */
+        .contact {
+            padding: 5rem 2rem;
+            background: white;
+            text-align: center;
+        }
+
+        .contact-info {
+            max-width: 600px;
+            margin: 2rem auto;
+            text-align: left;
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 15px;
+        }
+
+        .contact-item {
+            margin: 1rem 0;
+            font-size: 1.1rem;
+        }
+
+        /* 底部 */
+        footer {
+            background: #2d3748;
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+            
+            .screen {
+                width: 240px;
+                height: 180px;
+            }
+            
+            nav ul {
+                gap: 1rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <div class="logo">智慧启蒙</div>
+            <ul>
+                <li><a href="#features">产品特性</a></li>
+                <li><a href="#demo">在线试用</a></li>
+                <li><a href="#pricing">价格方案</a></li>
+                <li><a href="#contact">联系我们</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>儿童认知启蒙的智能伙伴</h1>
+            <p>安全 · 可控 · 开放 | 专为3-8岁儿童设计的图片展示终端</p>
+            <a href="#demo" class="cta-button">立即体验</a>
+        </div>
+    </section>
+
+    <section id="features" class="features">
+        <div class="container">
+            <h2 class="section-title">为什么选择我们</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">👁️</div>
+                    <h3>护眼优先</h3>
+                    <p>低蓝光TFT屏幕，蓝光辐射≤0.3W/m²，远低于国家标准，保护儿童视力健康</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>零干扰设计</h3>
+                    <p>无按键、无触摸、无网络，孩子只能专注观看，杜绝游戏和视频干扰</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔄</div>
+                    <h3>内容自由</h3>
+                    <p>支持自定义图片库，通过SD卡轻松更新，教师和家长完全掌控教学内容</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>即插即用</h3>
+                    <p>通电即播，无需设置，老人也能轻松操作，适合家庭和幼儿园使用</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>离线安全</h3>
+                    <p>完全离线工作，无数据采集，无隐私泄露，让家长和园所放心使用</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💰</div>
+                    <h3>超高性价比</h3>
+                    <p>零售价仅79元，批量采购更优惠，不到平板价格的1/10，普惠教育的最佳选择</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="demo" class="demo">
+        <div class="demo-container">
+            <h2 class="section-title">在线体验产品</h2>
+            <p style="margin-bottom: 2rem; color: #666;">模拟真实设备的图片轮播效果（图片加载可能需要几秒钟）</p>
+            
+            <div class="device-frame">
+                <div class="screen" id="screen">
+                    <img id="currentImage" src="" alt="展示图片">
+                </div>
+            </div>
+
+            <div class="demo-controls">
+                <button class="demo-button" id="playBtn">▶️ 开始播放</button>
+                <button class="demo-button" id="pauseBtn">⏸️ 暂停</button>
+                <button class="demo-button" id="prevBtn">⏮️ 上一张</button>
+                <button class="demo-button" id="nextBtn">⏭️ 下一张</button>
+            </div>
+
+            <div class="demo-info">
+                <h3 style="color: #667eea; margin-bottom: 1rem;">📱 使用说明</h3>
+                <p><strong>真实设备使用更简单：</strong></p>
+                <ul style="margin-left: 2rem; margin-top: 0.5rem;">
+                    <li>将教学图片放入SD卡根目录</li>
+                    <li>插入SD卡到设备</li>
+                    <li>连接USB电源</li>
+                    <li>设备自动开始轮播</li>
+                </ul>
+                <p style="margin-top: 1rem; color: #666;">
+                    ⏱️ 默认每5秒切换一张图片，循环播放<br>
+                    🔌 无需任何按键操作，适合儿童独立使用
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section id="pricing" class="pricing">
+        <div class="container">
+            <h2 class="section-title">灵活的价格方案</h2>
+            <div class="pricing-cards">
+                <div class="pricing-card">
+                    <h3>家庭版</h3>
+                    <div class="price">¥79<span class="price-unit">/台</span></div>
+                    <ul style="text-align: left; margin: 2rem 0;">
+                        <li>✓ 240×320 TFT屏幕</li>
+                        <li>✓ 完整功能</li>
+                        <li>✓ 一年质保</li>
+                        <li>✓ 免费技术支持</li>
+                        <li>✓ 操作指南</li>
+                    </ul>
+                    <!-- 修改处：使用 a 标签跳转链接 -->
+                    <a href="https://github.com/heathera-Jiang/HNU_InnovationEntrepreneurshipCourse/tree/main" target="_blank" class="demo-button">立即购买</a>
+                </div>
+
+                <div class="pricing-card featured">
+                    <h3>教育机构版</h3>
+                    <div class="price">¥49<span class="price-unit">/台起</span></div>
+                    <ul style="text-align: left; margin: 2rem 0;">
+                        <li>✓ 所有家庭版功能</li>
+                        <li>✓ 10台起批</li>
+                        <li>✓ 定制LOGO服务</li>
+                        <li>✓ 教师培训支持</li>
+                        <li>✓ 优先售后服务</li>
+                    </ul>
+                    <!-- 修改处：使用 a 标签跳转链接 -->
+                    <a href="https://github.com/heathera-Jiang/HNU_InnovationEntrepreneurshipCourse/tree/main" target="_blank" class="demo-button">立即购买</a>
+                </div>
+
+                <div class="pricing-card">
+                    <h3>创客开发版</h3>
+                    <div class="price">¥99<span class="price-unit">/台</span></div>
+                    <ul style="text-align: left; margin: 2rem 0;">
+                        <li>✓ 开源硬件资料</li>
+                        <li>✓ 完整固件源码</li>
+                        <li>✓ 电路图与PCB</li>
+                        <li>✓ 开发文档</li>
+                        <li>✓ 技术社区支持</li>
+                    </ul>
+                    <!-- 修改处：使用 a 标签跳转链接 -->
+                    <a href="https://github.com/heathera-Jiang/HNU_InnovationEntrepreneurshipCourse/tree/main" target="_blank" class="demo-button">立即购买</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2 class="section-title">联系我们</h2>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <strong>📧 邮箱：</strong> 3501596827@qq.com
+                </div>
+                <div class="contact-item">
+                    <strong>📱 电话：</strong> 176-7308-5816
+                </div>
+                <div class="contact-item">
+                    <strong>🏫 学校：</strong> 湖南大学
+                </div>
+                <div class="contact-item">
+                    <strong>👨‍💼 项目组长：</strong> 祖堃
+                </div>
+                <div class="contact-item">
+                    <strong>👥 团队成员：</strong> 彭之翼、杨婷棵、张思睿、陈思琪
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 智慧启蒙 - 儿童教育专用智能图片展示终端</p>
+        <p style="margin-top: 0.5rem; opacity: 0.8;">湖南大学 | 让技术真正服务于儿童认知培养</p>
+    </footer>
+
+    <script>
+        // 修改处：使用 GitHub Raw 链接
+        // 请确保您的 PIC 文件夹中的图片命名为 1.jpg, 2.jpg... 否则请修改下方的文件名
+        const repoBaseUrl = 'https://raw.githubusercontent.com/heathera-Jiang/HNU_InnovationEntrepreneurshipCourse/main/PIC/';
+        
+        const demoImages = [
+            { url: repoBaseUrl + '1.jpg', name: '展示图片 1' },
+            { url: repoBaseUrl + '2.jpg', name: '展示图片 2' },
+            { url: repoBaseUrl + '3.jpg', name: '展示图片 3' },
+            { url: repoBaseUrl + '4.jpg', name: '展示图片 4' },
+            { url: repoBaseUrl + '5.jpg', name: '展示图片 5' },
+            { url: repoBaseUrl + '6.jpg', name: '展示图片 6' }
+        ];
+
+        let currentIndex = 0;
+        let isPlaying = false;
+        let playInterval = null;
+
+        const screen = document.getElementById('screen');
+        const currentImage = document.getElementById('currentImage');
+        const playBtn = document.getElementById('playBtn');
+        const pauseBtn = document.getElementById('pauseBtn');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        function showImage(index) {
+            currentImage.style.opacity = '0';
+            setTimeout(() => {
+                currentImage.src = demoImages[index].url;
+                currentImage.alt = demoImages[index].name;
+                // 添加错误处理，如果图片加载失败（比如文件名不对），显示占位符
+                currentImage.onerror = function() {
+                    this.src = 'https://via.placeholder.com/320x240/cccccc/000000?text=Image+Load+Error';
+                    console.error('图片加载失败: ' + demoImages[index].url + ' 请检查文件名');
+                };
+                currentImage.onload = function() {
+                    this.style.opacity = '1';
+                };
+            }, 200);
+        }
+
+        function nextImage() {
+            currentIndex = (currentIndex + 1) % demoImages.length;
+            showImage(currentIndex);
+        }
+
+        function prevImage() {
+            currentIndex = (currentIndex - 1 + demoImages.length) % demoImages.length;
+            showImage(currentIndex);
+        }
+
+        function startPlay() {
+            if (isPlaying) return;
+            isPlaying = true;
+            playBtn.style.opacity = '0.5';
+            pauseBtn.style.opacity = '1';
+            playInterval = setInterval(nextImage, 3000);
+        }
+
+        function stopPlay() {
+            isPlaying = false;
+            playBtn.style.opacity = '1';
+            pauseBtn.style.opacity = '0.5';
+            if (playInterval) {
+                clearInterval(playInterval);
+                playInterval = null;
+            }
+        }
+
+        playBtn.addEventListener('click', startPlay);
+        pauseBtn.addEventListener('click', stopPlay);
+        nextBtn.addEventListener('click', () => {
+            stopPlay();
+            nextImage();
+        });
+        prevBtn.addEventListener('click', () => {
+            stopPlay();
+            prevImage();
+        });
+
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // 初始化
+        showImage(0);
+        pauseBtn.style.opacity = '0.5';
+
+        // 添加图片过渡效果
+        currentImage.style.transition = 'opacity 0.3s ease-in-out';
+    </script>
+</body>
+</html>
